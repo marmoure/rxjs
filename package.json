@@ -1,0 +1,17 @@
+{
+  "name": "rxjs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "snowpack dev"
+  },
+  "dependencies": {
+    "rxjs": "^6.6.7",
+    "rxjs-compat": "^6.6.7"
+  },
+  "devDependencies": {
+    "snowpack": "^3.2.2",
+    "typescript": "^4.2.4"
+  }
+}
