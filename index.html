@@ -7,14 +7,27 @@
     <title>Document</title>
     <style>
         body { font-family: Arial; background: #ececec;}
-        ul { list-style-type: none; padding: 20px; }
-        li { padding: 20px; background: #fff; margin-bottom: 5px; }
+        .div {
+            position: relative;
+        }
+        .popup {
+            position: absolute;
+            content: "";
+            padding: 4rem;
+            display: none;
+            background: rgba(202, 114, 114, 0.678);
+            transform: none;
+        }
+        
     </style>
 </head>
 <body>
-    <ul id="output">
-
-    </ul>
+    <div id="div" class="div" style="padding: 3rem; background: #ccc;">
+        <div class="popup" id="popup">
+            weeeeeee
+        </div>
+        gfdgfdggfdgfd
+    </div>
     <script type="module" src="src/index.js"></script>
 </body>
 </html>

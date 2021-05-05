@@ -1,23 +1,38 @@
-import { SubscriptionLoggable } from 'rxjs/internal/testing/SubscriptionLoggable';
-import { Observable } from 'rxjs/Observable';
-import { take , repeat } from 'rxjs/operators';
-import {logBlue, logRed} from './logs';
+import { from, fromEvent, interval, Observable } from 'rxjs';
+import { merge } from 'rxjs-compat/operator/merge';
+import { take , repeat, startWith, map, filter, tap, switchAll, takeUntil, buffer, throttle, bufferTime, finalize, mergeAll, concatAll } from 'rxjs/operators';
 
-const o = new Observable((observer) => {
-    setInterval(() => {
-        logRed("Obserable loop");
-        observer.next("this is an obseravable");
-    },1000);
-});
 
-const p = new Promise((resolve,reject) => {
-    logBlue("creating promise");
-    resolve("this is a promise");
-});
 
-p.then(logBlue);
+const div = document.getElementById("div");
+const popup = document.getElementById("popup");
+let x;
+let y;
 
-const subscribtion = o.subscribe(logRed);
-setTimeout(() => {
-    subscribtion.unsubscribe();
-},2050);
+fromEvent(div,"mouseenter")
+.pipe(
+    tap(e => popup.style.display= "block"),
+    map((e) => fromEvent(div,"mousemove")),
+    concatAll<MouseEvent>(),
+    map((e : MouseEvent) => {
+        if(e.target === popup) {
+            x += e.offsetX;
+            y +=e.offsetY;
+        } else {
+            x = e.offsetX;
+            y = e.offsetY;
+        }
+        return ({
+            x,
+            y,
+        });
+    }),
+    tap(dim => {
+        popup.style.top = `${dim.y}px`
+        popup.style.left = `${dim.x}px`
+    }),
+    takeUntil(fromEvent(div,"mouseleave")),
+    finalize(() => popup.style.display= "none"),
+    repeat()
+)
+.subscribe()
