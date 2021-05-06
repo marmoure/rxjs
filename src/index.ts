@@ -1,38 +1,34 @@
-import { from, fromEvent, interval, Observable } from 'rxjs';
-import { merge } from 'rxjs-compat/operator/merge';
-import { take , repeat, startWith, map, filter, tap, switchAll, takeUntil, buffer, throttle, bufferTime, finalize, mergeAll, concatAll } from 'rxjs/operators';
+import { combineLatest, fromEvent, merge } from "rxjs";
+import { map, startWith, tap } from "rxjs/operators";
+
+const heightRange = document.getElementById("height") as HTMLInputElement;
+const heightValue = document.getElementById("height-value");
+const widthRange = document.getElementById("width") as HTMLInputElement;
+const widthValue = document.getElementById("width-value");
+const areaInput = document.getElementById("area") as HTMLInputElement;
+const areaDiv = document.getElementById("areaDIV") as HTMLDivElement;
 
 
-
-const div = document.getElementById("div");
-const popup = document.getElementById("popup");
-let x;
-let y;
-
-fromEvent(div,"mouseenter")
-.pipe(
-    tap(e => popup.style.display= "block"),
-    map((e) => fromEvent(div,"mousemove")),
-    concatAll<MouseEvent>(),
-    map((e : MouseEvent) => {
-        if(e.target === popup) {
-            x += e.offsetX;
-            y +=e.offsetY;
-        } else {
-            x = e.offsetX;
-            y = e.offsetY;
-        }
-        return ({
-            x,
-            y,
-        });
-    }),
-    tap(dim => {
-        popup.style.top = `${dim.y}px`
-        popup.style.left = `${dim.x}px`
-    }),
-    takeUntil(fromEvent(div,"mouseleave")),
-    finalize(() => popup.style.display= "none"),
-    repeat()
+const height$ = fromEvent(heightRange,"input").pipe(
+  map(e => e.target.value),
+  startWith(heightRange.value),
+  tap(v => { heightValue.innerText = v}),
 )
-.subscribe()
+const width$ = fromEvent(widthRange,"input").pipe(
+  map(e => e.target.value),
+  startWith(widthRange.value),
+  tap(v => { widthValue.innerText = v}),
+)
+
+const area$ = combineLatest(
+  [height$,width$]
+).pipe(
+  tap(([w,h]) => {
+    areaDiv.style.width = `${w}px`;
+    areaDiv.style.height = `${h}px`
+  }),
+  map(([w,h]) => w*h),
+  tap(v => areaInput.value = v),
+);
+
+area$.subscribe();

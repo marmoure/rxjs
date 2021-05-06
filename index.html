@@ -10,24 +10,31 @@
         .div {
             position: relative;
         }
-        .popup {
-            position: absolute;
-            content: "";
-            padding: 4rem;
-            display: none;
-            background: rgba(202, 114, 114, 0.678);
-            transform: none;
-        }
-        
+        .area {
+            border: solid 2px #000;
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            margin: 1rem;
+        }      
     </style>
 </head>
 <body>
-    <div id="div" class="div" style="padding: 3rem; background: #ccc;">
-        <div class="popup" id="popup">
-            weeeeeee
-        </div>
-        gfdgfdggfdgfd
-    </div>
+    <label for="">width</label>
+    <input type="range" name="range" id="width" value="40" max="500"> <span id="value"></span>
+    <span id="width-value"></span>
+    <br>
+    <label for="">height</label>
+    <input type="range" name="range" id="height" value="40" max="400"> <span id="value"></span>
+    <span id="height-value"></span>
+    <br>
+    <label for="">area</label>
+    <input type="number" name="" id="area">
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="area" id="areaDIV"></div>
     <script type="module" src="src/index.js"></script>
 </body>
 </html>
